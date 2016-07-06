@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	tm "github.com/buger/goterm"
+	tm "github.com/antongulenko/goterm"
 )
 
 func main() {
