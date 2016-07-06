@@ -3,6 +3,8 @@ package goterm
 import (
 	"bytes"
 	"strings"
+
+	"github.com/antongulenko/golib"
 )
 
 const DEFAULT_BORDER = "- │ ┌ ┐ └ ┘"
@@ -99,12 +101,13 @@ func (b *Box) String() (out string) {
 				line = ""
 			}
 
-			if len(line) > contentWidth-1 {
+			linelen := golib.StringLength(line)
+			if linelen > contentWidth-1 {
 				// If line is too large limit it
 				line = line[0:contentWidth]
 			} else {
 				// If line is too small enlarge it by adding spaces
-				line = line + strings.Repeat(" ", contentWidth-len(line))
+				line = line + strings.Repeat(" ", contentWidth-linelen)
 			}
 
 			line = prefix + line + suffix
