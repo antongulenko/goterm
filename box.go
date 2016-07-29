@@ -104,7 +104,7 @@ func (b *Box) String() (out string) {
 			linelen := golib.StringLength(line)
 			if linelen > contentWidth-1 {
 				// If line is too large limit it
-				line = line[0:contentWidth]
+				line = golib.Substring(line, 0, contentWidth)
 			} else {
 				// If line is too small enlarge it by adding spaces
 				line = line + strings.Repeat(" ", contentWidth-linelen)
