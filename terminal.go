@@ -195,8 +195,9 @@ func CurrentHeight() int {
 
 // Flush buffer and ensure that it will not overflow screen
 func Flush() {
+	h := Height()
 	for idx, str := range strings.Split(Screen.String(), "\n") {
-		if idx > Height() {
+		if h > 0 && idx > h {
 			return
 		}
 
