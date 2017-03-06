@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"os"
 	"runtime"
+	"sync"
 	"syscall"
 	"unsafe"
 )
+
+var warnOnce sync.Once
 
 func getWinsize() (*winsize, error) {
 	ws := new(winsize)
@@ -29,7 +32,9 @@ func getWinsize() (*winsize, error) {
 	)
 
 	if int(r1) == -1 {
-		fmt.Println("Error:", os.NewSyscallError("GetWinsize", errno))
+		warnOnce.Do(func() {
+			fmt.Fprintln(os.Stderr, "goterm.getWinsize Error:", os.NewSyscallError("GetWinsize", errno))
+		})
 		return nil, os.NewSyscallError("GetWinsize", errno)
 	}
 	return ws, nil

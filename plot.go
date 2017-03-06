@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"strings"
+
+	log "github.com/Sirupsen/logrus"
 )
 
 const (
@@ -156,7 +158,7 @@ func (c *LineChart) Draw(data *DataTable) (out string) {
 	c.data = data
 
 	if c.Flags&DRAW_INDEPENDENT != 0 && len(data.columns) > 3 {
-		fmt.Println("Error: Can't use DRAW_INDEPENDENT for more then 2 graphs")
+		log.Warnln("goterm.LineChart.Draw Error: Can't use DRAW_INDEPENDENT for more then 2 graphs")
 		return ""
 	}
 
