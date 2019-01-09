@@ -3,7 +3,6 @@
 package goterm
 
 import (
-	"fmt"
 	"os"
 	"runtime"
 	"sync"
@@ -16,13 +15,9 @@ var warnOnce sync.Once
 func getWinsize() (*winsize, error) {
 	ws := new(winsize)
 
-	var _TIOCGWINSZ int64
-
-	switch runtime.GOOS {
-	case "linux":
-		_TIOCGWINSZ = 0x5413
-	case "darwin":
-		_TIOCGWINSZ = 1074295912
+	ws, err := unix.IoctlGetWinsize(int(os.Stdout.Fd()), unix.TIOCGWINSZ)
+	if err != nil {
+		return nil, os.NewSyscallError("GetWinsize", err)
 	}
 
 	r1, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
