@@ -3,18 +3,18 @@
 package goterm
 
 import (
+	"fmt"
 	"os"
-	"runtime"
 	"sync"
 	"syscall"
 	"unsafe"
+
+	"golang.org/x/sys/unix"
 )
 
 var warnOnce sync.Once
 
-func getWinsize() (*winsize, error) {
-	ws := new(winsize)
-
+func getWinsize() (*unix.Winsize, error) {
 	ws, err := unix.IoctlGetWinsize(int(os.Stdout.Fd()), unix.TIOCGWINSZ)
 	if err != nil {
 		return nil, os.NewSyscallError("GetWinsize", err)
@@ -22,7 +22,7 @@ func getWinsize() (*winsize, error) {
 
 	r1, _, errno := syscall.Syscall(syscall.SYS_IOCTL,
 		uintptr(syscall.Stdin),
-		uintptr(_TIOCGWINSZ),
+		uintptr(unix.TIOCGWINSZ),
 		uintptr(unsafe.Pointer(ws)),
 	)
 
